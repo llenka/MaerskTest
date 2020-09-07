@@ -1,0 +1,61 @@
+1. Create a new organisation e.g. Maersk
+2. Under the org. , we need to create the project e.g. FastCarz  and we can make it private or public.(Private is reccomended for seurity reasons)
+3.now we can add the members to the project.
+4. Now under repo--> files we can add the git repo url. which contais the source code.
+5.go to pipelline--> choose classic editor/yaml file
+i am choosing classic editor-->choose the source repo--> azure respos git
+
+Now choose the repository and the branch name from where we need to load the source code
+ Now  choose the project code type.
+ Now it ll create few agent jobs like restore , build, test, publish , publish artifact etc.
+ Here we can provide the build pipeline name as FastCarzbuildpipeline.
+ Now save and queue to run.
+ For auto trigger, go to the pipeline
+   trigger-> check enable contineous integration--> here we can choose the type as include and the branch 
+where the commit ll go.
+ so that every time the developer commits the code to the repository , the build ll trigger automatically.
+
+now the build and the artifact is created and saves in drop artifact.
+ So the build pipeline is completed.
+We need to create azure app service in the azure portal for the release deployments.
+
+Now we will create a release pipeline.
+
+for that goto to pipeline-> release-> new pipeline-->choose what type of service we need for deployment
+Here in this case we ll choose azure app service.( we can have a kubernetes cluster as well)
+
+->once choosen, now we will add the artifact from where it ll get the input build for release
+(from the build pipeline name that we created in the above steps that is FastCarzbuildpipeline.)
+
+now it ll ask for subscription details . for this we need to create a service connection under setting option.
+
+goto to setting--> service connection--> choose azure resource manager-->
+Now provide the subscription details and save it as a name.
+
+Now provide the same in the release pipeline setting.
+
+
+Now provide the app service name where we want to publish and save it.
+
+Once the release pipeline is created, to run it click on the create release option for execution
+
+To add further stages to the release pipeline, goto the release pipeline that we already created-> edit->add new stage
+Here we can choose the  app service name that we created for qa env.
+Now go to the predeployment setting of the stage and choose after stage and choose Dev. env. so that after Dev Env. deployment will complete then only
+the QA Env. will deployed else it should not deployed in the QA.
+
+For production instead of deploying directly to the prod app service, we will create a slot in the prod app service called staging and will deploy to it first
+and then we ll swap it with production.by doing in that way we ll have zero downtime.
+
+Once it is deplyed to staging we need to create one more task in the release task that is swap for this we ll choose azure app service manage.
+
+after every stage we an have a approval stage that is post deployment approval there 
+we can add the approvers name and details and time out period as well. So once the approver ll approve the request then only the next deployment ll execute.
+
+for manual intervention 
+go to the stage--> add a agent less job--> choose manual intervention-->
+we can set it up before publish to prod server.
+
+Here we can enable contineous deplyment trigger.(from the artifact stage) so that every time the developer commits the code to the repository , the release ll happen
+ automatically.
+

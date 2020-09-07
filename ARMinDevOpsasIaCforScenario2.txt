@@ -1,0 +1,21 @@
+First create the ARM template and the parameter file and upload it to the Git Repository.
+
+Now go to the azure devops,
+
+Go to pipeline--> builds-> new pipeline-> github-> select the repository-> save it
+
+now create a release pipeline--> select empty job-> name it(Accordingly) --> Add the artifact details(like service, source repo, branch , version etc.)
+
+  Now enable the contineous deplyment triger in release pipeline.
+
+ Under the release pipeline, we should create a task which ll deploy our ARM Template. For that,
+ Click on Task-> Add Task --> search for " Azure resource group deployment" 
+ Here we can provide the subcription Details,then  select the Resource group name, location ,template location, tempalte, template parameter file.
+ 
+Here instead of providing the subscription details, we can do the following which increases the security
+
+ For this we need to create a service connection under setting option. Folow the below steps to create the Service Connection.
+
+Goto to setting--> service connection--> choose azure resource manager-->Now provide the subscription details and save it as a name.
+
+Now provide the same in the release pipeline setting.
